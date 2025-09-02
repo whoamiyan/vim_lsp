@@ -1,0 +1,234 @@
+"" vim:ft=vim
+
+" ================= 文件类型自动识别 =================
+" 根据文件扩展名自动设置对应 filetype, 启用语法高亮和缩进规则等
+autocmd BufRead,BufNewFile *.yrl,*.escript,*.es setlocal filetype=erlang
+autocmd BufRead,BufNewFile *.pl,*.pro setlocal filetype=prolog
+autocmd BufRead,BufNewFile *.e setlocal filetype=elang
+autocmd BufRead,BufNewFile *.S,*.s,*.asm setlocal filetype=asm
+autocmd BufRead,BufNewFile *.hex,*.ihx setlocal filetype=hex
+
+" ================= 基础行为设置 =================
+set nocompatible              " 禁用 vi 兼容模式，启用 Vim 增强功能
+set nosmartindent             " 禁用智能缩进（可选）
+set autoindent                " 自动缩进（每行继承上一行的缩进）
+set noincsearch               " 搜索时不启用增量搜索（可手动调整）
+set title                     " 设置终端窗口标题
+set ruler                     " 显示光标所在的行和列
+set modeline modelines=6      " 启用前后 6 行的 modeline 支持
+set belloff=all               " 禁用所有提示音（蜂鸣/闪屏）
+set shortmess=atI             " 启动时屏蔽 intro 界面等冗余信息
+" 关闭 Vim 启动时的冗余信息提示
+set shortmess+=I
+
+" ================= 编码设置 =================
+set encoding=utf-8            " Vim 内部使用 UTF-8 编码
+set fileencodings=utf-8,latin-1,chinese,gbk,gb2312,gb18030
+set fencs=utf8,gbk,gb2312,gb18030
+set langmenu=none             " 不使用语言菜单（适合服务器终端）
+
+" ================= 显示设置 =================
+set number                    " 显示行号
+set relativenumber            " 显示相对行号，利于跳转
+" set numberwidth=9             " 行号栏宽度
+set cursorline                " 高亮当前行
+set cursorcolumn              " 高亮当前列（便于结构对齐）
+set showmatch                 " 光标在括号处时高亮匹配括号
+set scrolloff=5               " 滚动时上下保留 5 行
+
+" ================= 状态栏配置 =================
+set laststatus=2              " 总是显示状态栏
+set statusline=%f%m%r%h%w\ [%{&filetype}]\ [%l:%c]\ [%p%%] " 自定义状态栏内容：文件名、状态、文件类型、位置、进度等
+
+" ================= 搜索优化 =================
+set ignorecase                " 搜索时忽略大小写
+set smartcase                 " 如果包含大写字母则区分大小写
+set hlsearch                  " 高亮搜索结果
+set incsearch                 " 启用增量搜索
+nnoremap <Esc><Esc> :noh<CR>
+
+" ================= 缩进设置 =================
+set cindent                   " C 风格缩进
+set smartindent               " 智能缩进
+set tabstop=4                 " tab 显示为 4 空格
+set softtabstop=4             " 编辑时 tab 键为 4 空格
+set shiftwidth=4              " 自动缩进宽度
+set expandtab                 " 使用空格代替 tab
+set autoindent                " 自动缩进（继承上一行）
+set smarttab                  " 根据上下文智能缩进
+
+" ================= 命令补全体验 =================
+set wildmenu                  " 启用命令行补全菜单
+set wildmode=longest:list,full " 补全时按最长、列表、完整顺序匹配
+set showcmd                   " 显示命令输入（右下角）
+set history=1000              " 历史命令保存 1000 条
+
+" ================= Leader 键定义 =================
+let mapleader = " "           " 设置 leader 键为空格
+let g:mapleader = " "
+
+" ================= 插件管理 =================
+call plug#begin('~/.vim/plugged')
+
+" ---- LSP + 补全相关 ----
+Plug 'prabirshrestha/vim-lsp'                         " LSP 客户端
+Plug 'prabirshrestha/asyncomplete.vim'                " 异步补全框架
+Plug 'prabirshrestha/asyncomplete-lsp.vim'            " 将补全连接到 LSP
+
+" ---- 文件模糊查找 ----
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }    " FZF 二进制安装器
+Plug 'junegunn/fzf.vim'                               " FZF 的 Vim 接口
+
+" ---- 文件浏览器 ----
+Plug 'preservim/nerdtree'                             " 文件树（无图标）
+Plug 'liuchengxu/vista.vim'                           " 函数列表
+
+" ---- 外观增强 ----
+Plug 'altercation/vim-colors-solarized'               " Solarized 主题
+Plug 'itchyny/vim-cursorword'                         " 光标停留时高亮当前单词
+Plug 'lfv89/vim-interestingwords'                     " 支持多词高亮（调试利器）
+Plug 'luochen1990/rainbow'                            " 彩虹括号高亮
+Plug 'mhinz/vim-startify'                             " 启动页插件
+Plug 'lfv89/vim-interestingwords'                     "单词高亮
+
+" ---- 编辑辅助 ----
+Plug 'tpope/vim-commentary'                           " 快速注释
+Plug 'tpope/vim-surround'                             " 包围符操作
+Plug 'jiangmiao/auto-pairs'                           " 自动补全括号等
+Plug 'Lokaltog/vim-easymotion'                        " 快速跳转
+
+call plug#end()
+
+" ================= 主题设置 =================
+set termguicolors             " 启用 24 位真彩色支持
+set background=dark           " 设置背景为深色
+colorscheme solarized         " 加载 solarized 主题
+
+highlight Search guibg=#FFAA00 guifg=yellow gui=bold
+highlight IncSearch guibg=#FF55FF guifg=black gui=bold
+
+" ================= EasyMotion 快捷键 =================
+let g:EasyMotion_smartcase = 1
+nmap <leader><leader>h <Plug>(easymotion-linebackward)
+nmap <leader><leader>j <Plug>(easymotion-j)
+nmap <leader><leader>k <Plug>(easymotion-k)
+nmap <leader><leader>l <Plug>(easymotion-lineforward)
+nmap <leader><leader>. <Plug>(easymotion-repeat)
+
+" ================= FZF 快捷键 =================
+nnoremap <leader>f :Files<CR>
+nnoremap <leader>g :Rg<Space>
+nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>l :Lines<CR>
+nnoremap <leader>h :History<CR>
+
+" ================= vista 快捷键 =================
+let g:vista_default_executive = 'vim_lsp'
+nnoremap <leader>o :Vista!!<CR> 
+" 自动打开时聚焦当前函数
+let g:vista_cursor_delay = 300
+" let g:vista_sidebar_position = 'vertical topleft'
+let g:vista_echo_cursor = 0
+
+" ================= NerdTree 快捷键及行为增强 =================
+map <C-n> :NERDTreeToggle<CR>       " Ctrl+n 打开/关闭文件树
+let g:NERDTreeChDirMode=2           " 打开文件时，NERDTree 自动切换到该文件目录
+let g:NERDTreeHijackNetrw = 1       " 使用 NERDTree 替代默认文件浏览器
+let g:NERDTreeShowHidden = 1        " 显示隐藏文件
+let g:NERDTreeAutoCenter = 1        " 自动居中当前选中节点
+" ================= NerdTree 快捷键及行为增强 =================
+" 是否由手动打开控制，用于跳过自动定位逻辑
+let g:nerdtree_manual_open = 0
+
+" 使用 ToggleNerdTree() 保证只打开一个文件树窗口，且自动定位文件
+function! ToggleNerdTree()
+  if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
+    exe "NERDTreeClose"
+  else
+    let g:nerdtree_manual_open = 1
+    exe "NERDTree"
+    exe "NERDTreeFind"
+    let g:nerdtree_manual_open = 0
+  endif
+endfunction
+nnoremap <silent> <C-n> :call ToggleNerdTree()<CR>
+
+let g:NERDTreeChDirMode=2           " 打开文件时，NERDTree 自动切换到该文件目录
+let g:NERDTreeHijackNetrw = 1       " 使用 NERDTree 替代默认文件浏览器
+let g:NERDTreeShowHidden = 1        " 显示隐藏文件
+let g:NERDTreeAutoCenter = 1        " 自动居中当前选中节点
+
+" 自动定位当前文件，仅在 NerdTree 已打开，且非 Quickfix 或手动执行状态下触发
+function! s:MaybeLocateInNERDTree()
+  if g:nerdtree_manual_open == 0
+        \ && exists("t:NERDTreeBufName")
+        \ && bufwinnr(t:NERDTreeBufName) != -1
+        \ && &filetype !~# 'nerdtree\|startify\|qf'
+        \ && !&previewwindow
+    " 延迟执行，避免干扰窗口布局（如 quickfix）
+    call timer_start(10, {-> execute('NERDTreeFind | wincmd p')})
+  endif
+endfunction
+
+autocmd BufWinEnter * call s:MaybeLocateInNERDTree()
+
+" ================= 行号快捷键 =================
+nmap <leader>on :set number relativenumber<CR>
+nmap <leader>cn :set nonumber norelativenumber<CR>
+
+" ================= Rainbow 设置 =================
+let g:rainbow_active = 1
+let g:rainbow_conf = {
+  \ 'guifgs': ['darkorange3', 'seagreen3', 'royalblue3', 'firebrick'],
+  \ 'ctermfgs': ['lightyellow', 'lightcyan','lightblue', 'lightmagenta'],
+  \ 'operators': '_,_',
+  \ 'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold']
+\ }
+
+" ================= asyncomplete 设置 =================
+let g:asyncomplete_auto_popup = 1
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() . "\<c-y>" : "\<cr>"
+
+" ================= InterestingWords 设置 =================
+" 快速高亮当前词
+nmap <leader>m <Plug>InterestingWordsToggle
+
+" 清除所有高亮
+nmap <leader>M <Plug>InterestingWordsClear
+
+"================= vim-lsp 设置 =================
+function! s:on_lsp_buffer_enable()
+    setlocal omnifunc=lsp#complete                       " 设置补全函数
+    setlocal signcolumn=yes                              " 显示诊断符号列
+    nmap <buffer> K <plug>(lsp-hover)                    " 查看文档悬浮
+    nmap <buffer> <leader>d <plug>(lsp-definition)              " 跳转定义
+    nmap <buffer> <leader>r <plug>(lsp-references)              " 查找引用
+    nmap <buffer> <leader>R <plug>(lsp-rename)                  " 重命名
+    nmap <buffer> <leader>e <plug>(lsp-document-diagnostics) " 文档诊断
+endfunction
+
+augroup lsp_install
+    au!
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enable()
+augroup END
+
+" 注册 clangd LSP(用于 C/C++)
+if executable('clangd')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'clangd',
+        \ 'cmd': {server_info->['clangd', '-background-index']},
+        \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+        \ })
+endif
+
+" 注册 pylsp LSP(用于 Python)
+if executable('pylsp')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pylsp',
+        \ 'cmd': {server_info->['pylsp']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+
